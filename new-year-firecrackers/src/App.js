@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import './App.css'; // Ensure this CSS file is imported
-import Fireworks from 'fireworks-library'; // Ensure Fireworks library is correctly imported
+import Fireworks from 'fireworks-js'; // Import fireworks-js
+import './App.css';
 
 function App() {
   const [familyName, setFamilyName] = useState('');
@@ -11,58 +11,55 @@ function App() {
   const [error, setError] = useState('');
   const [showFireworks, setShowFireworks] = useState(false);
 
-  // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Check if the family name input is empty
     if (!familyName.trim()) {
       setError('Please write your name');
       return;
     }
 
-    setError(''); // Clear error message if input is valid
-    setIsSnowing(false); // Stop the snow
-    setShowConfetti(true); // Start the confetti
-    setShowFireworks(true); // Show the fireworks overlay
+    setError('');
+    setIsSnowing(false);
+    setShowConfetti(true);
     triggerConfetti();
-    setIsSubmitted(true); // Set submitted state to true
-    setTimeout(() => setShowConfetti(false), 5000); // Confetti duration
-    setTimeout(() => setShowFireworks(false), 10000); // Hide fireworks after 10 seconds
+    setIsSubmitted(true);
+    setTimeout(() => setShowConfetti(false), 5000);
   };
 
   const triggerConfetti = () => {
-    // Trigger confetti
-    const duration = 5 * 1000; // Duration of confetti
+    const duration = 5 * 1000;
     const end = Date.now() + duration;
+
     (function frame() {
       confetti({
         particleCount: 5,
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#ff6347', '#32cd32', '#ffff00'], // Confetti colors
+        colors: ['#ff6347', '#32cd32', '#ffff00'],
       });
       confetti({
         particleCount: 5,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#ff6347', '#32cd32', '#ffff00'], // Confetti colors
+        colors: ['#ff6347', '#32cd32', '#ffff00'],
       });
 
       if (Date.now() < end) {
         requestAnimationFrame(frame);
+      } else {
+        setShowFireworks(true);
+        setTimeout(() => setShowFireworks(false), 4000);
       }
     })();
   };
 
-  // Fireworks setup and trigger
   useEffect(() => {
     if (showFireworks) {
       const container = document.querySelector(".fireworkDiv");
       const fireworks = new Fireworks(container, {
-        autoresize: true,
         opacity: 0.5,
         acceleration: 1.05,
         friction: 0.97,
@@ -74,53 +71,46 @@ function App() {
         intensity: 30,
         flickering: 50,
         lineStyle: 'round',
-        hue: {
-          min: 0,
-          max: 360
-        },
-        delay: {
-          min: 30,
-          max: 60
-        },
-        rocketsPoint: {
-          min: 0,
-          max: 100
-        },
-        lineWidth: {
-          explosion: {
-            min: 1,
-            max: 3
-          },
-          trace: {
-            min: 1,
-            max: 2
-          }
-        },
-        brightness: {
-          min: 50,
-          max: 80
-        },
-        decay: {
-          min: 0.015,
-          max: 0.03
-        },
-        mouse: {
-          click: false,
-          move: false,
-          max: 1
-        }
+        hue: { min: 0, max: 360 },
+        delay: { min: 30, max: 60 },
+        rocketsPoint: { min: 0, max: 100 },
+        lineWidth: { explosion: { min: 1, max: 3 }, trace: { min: 1, max: 2 } },
+        brightness: { min: 50, max: 80 },
+        decay: { min: 0.015, max: 0.03 },
+        mouse: { click: false, move: false, max: 1 },
       });
+
       fireworks.start(); // Start fireworks animation
     }
   }, [showFireworks]);
+
+  useEffect(() => {
+    if (isSnowing) {
+      const numberOfSnowflakes = 50;
+      const snowContainer = document.querySelector('.App');
+
+      for (let i = 0; i < numberOfSnowflakes; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄️';
+        snowflake.style.left = `${Math.random() * 100}vw`;
+        snowflake.style.animationDuration = `${Math.random() * 3 + 5}s`;
+        snowflake.style.animationDelay = `${Math.random() * 5}s`;
+        snowContainer.appendChild(snowflake);
+      }
+    }
+
+    return () => {
+      const snowflakes = document.querySelectorAll('.snowflake');
+      snowflakes.forEach(snowflake => snowflake.remove());
+    };
+  }, [isSnowing]);
 
   return (
     <div className="App">
       <div className="tree"></div>
       <div className="tree-stand"></div>
       <h1>Happy New Year!</h1>
-
-      {/* Form for user input */}
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <label>
@@ -136,29 +126,29 @@ function App() {
         </form>
       </div>
 
-      {/* Error message */}
       {error && <p className="error-message">{error}</p>}
 
-      {/* Success message when form is submitted */}
+      {/* Show the family name message after submission in the same style as the second paragraph */}
+      {isSubmitted && !showConfetti && !showFireworks && (
+        <h2 className="message-style">Happy New Year, {familyName} Family!</h2>
+      )}
+
       {isSubmitted && (
-        <div className="message-style">
-          <p>Happy New Year, {familyName} Family!</p>
-          <p>Family makes every celebration special. Wishing us all a New Year full of love, joy, and happy moments together. From Nazianah.</p>
+        <div>
+          <h2 className="message-style">Family makes every celebration special. Wishing us all a New Year full of love, joy, and happy moments together. From Nazianah.</h2>
         </div>
       )}
 
-      {/* Firework overlay */}
       {showFireworks && (
-        <div className="firework-overlay">
-          <div className="fireworkDiv"></div>
-        </div>
-      )}
-
-      {/* Snow effect */}
-      {isSnowing && (
-        <div className="snowflakes-container">
-          {/* Snowflakes will be added dynamically */}
-        </div>
+        <div className="fireworkDiv" style={{
+          position: 'absolute', 
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%', 
+          zIndex: 9999, 
+          pointerEvents: 'none'  // Ensures fireworks don't interfere with user input
+        }} />
       )}
     </div>
   );
