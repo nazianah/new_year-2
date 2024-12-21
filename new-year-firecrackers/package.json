@@ -5,6 +5,8 @@
   "dependencies": {
     "canvas-confetti": "^1.9.3",
     "cra-template": "1.2.0",
+    "fireworks": "^2.2.7",
+    "fireworks-js": "^2.10.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-scripts": "5.0.1",
