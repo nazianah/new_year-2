@@ -1,0 +1,168 @@
+/* Base mobile-first styles */
+.App {
+  text-align: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #ffcccc; /* Light red background for Christmas */
+  background-image: url('https://www.transparenttextures.com/patterns/brick-wall-2.png'); /* Subtle texture background */
+  background-size: cover;
+  background-position: center center;
+  height: 100vh;
+  color: #ffffff; /* White text */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Snowy effect - adding snowflakes */
+@keyframes snow {
+  0% { top: -10%; }
+  100% { top: 100%; }
+}
+
+.snowflake {
+  position: absolute;
+  color: white;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9999;
+  animation: snow linear infinite;
+}
+
+.snowflake:nth-child(odd) {
+  font-size: 1.5rem;
+  animation-duration: 5s;
+  animation-delay: 0s;
+}
+
+.snowflake:nth-child(even) {
+  font-size: 2rem;
+  animation-duration: 8s;
+  animation-delay: 2s;
+}
+
+/* Christmas-themed header */
+h1 {
+  font-size: 2rem;
+  color: #228b22; /* Christmas green */
+  font-family: 'Cursive', sans-serif;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #ff6347; /* Tomato red */
+  text-shadow: 2px 2px 4px #000000;
+}
+
+/* Form container for input and button */
+.form-container {
+  display: flex;
+  flex-direction: column; /* Stack input and button vertically */
+  align-items: center; /* Center the elements horizontally */
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
+input {
+  width: 80%; /* Adjust the width to fit well */
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #228b22;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+button {
+  width: 80%; /* Same width as input */
+  padding: 10px;
+  background-color: #ff6347; /* Red button */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #ff4500; /* Dark red button hover */
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .form-container {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  input,
+  button {
+    width: 100%;
+  }
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 70px;
+}
+
+/* Success message after form submission */
+h2 {
+  color: black; /* Change the color of the message to black */
+  font-size: 20px;
+  font-weight: normal;
+  padding-top: 70px;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 600px) and (max-width: 1024px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .form-container {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  input,
+  button {
+    width: 100%;
+  }
+}
+
+/* Desktop and larger screens */
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  .form-container {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  input,
+  button {
+    width: 100%;
+  }
+}
