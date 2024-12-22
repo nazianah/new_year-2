@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import Fireworks from 'fireworks-js'; // Import fireworks-js
+import Fireworks from 'fireworks-js';
 import './App.css';
 
 function App() {
@@ -24,11 +24,12 @@ function App() {
     setShowConfetti(true);
     triggerConfetti();
     setIsSubmitted(true);
+
     setTimeout(() => setShowConfetti(false), 5000);
   };
 
   const triggerConfetti = () => {
-    const duration = 5 * 1000;
+    const duration = 5000; // 5 seconds
     const end = Date.now() + duration;
 
     (function frame() {
@@ -58,7 +59,7 @@ function App() {
 
   useEffect(() => {
     if (showFireworks) {
-      const container = document.querySelector(".fireworkDiv");
+      const container = document.querySelector('.fireworkDiv');
       const fireworks = new Fireworks(container, {
         opacity: 0.5,
         acceleration: 1.05,
@@ -80,7 +81,11 @@ function App() {
         mouse: { click: false, move: false, max: 1 },
       });
 
-      fireworks.start(); // Start fireworks animation
+      fireworks.start();
+
+      return () => {
+        fireworks.stop(); // Cleanup on component unmount
+      };
     }
   }, [showFireworks]);
 
@@ -102,7 +107,7 @@ function App() {
 
     return () => {
       const snowflakes = document.querySelectorAll('.snowflake');
-      snowflakes.forEach(snowflake => snowflake.remove());
+      snowflakes.forEach((snowflake) => snowflake.remove());
     };
   }, [isSnowing]);
 
@@ -113,42 +118,49 @@ function App() {
       <h1>Happy New Year!</h1>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <label>
+          <label htmlFor="familyName">
             Enter Family Name:
             <input
+              id="familyName"
               type="text"
               value={familyName}
               onChange={(e) => setFamilyName(e.target.value)}
               placeholder="e.g., Jhakri"
+              aria-describedby="error-message"
             />
           </label>
           <button type="submit">Submit</button>
         </form>
       </div>
 
-      {error && <p className="error-message">{error}</p>}
+      {error && <p id="error-message" className="error-message" aria-live="polite">{error}</p>}
 
-      {/* Show the family name message after submission in the same style as the second paragraph */}
       {isSubmitted && !showConfetti && !showFireworks && (
         <h2 className="message-style">Happy New Year, {familyName} Family!</h2>
       )}
 
       {isSubmitted && (
         <div>
-          <h2 className="message-style">Family makes every celebration special. Wishing us all a New Year full of love, joy, and happy moments together. From Nazianah.</h2>
+          <h2 className="message-style">
+            Family makes every celebration special. Wishing us all a New Year
+            full of love, joy, and happy moments together. From Nazianah.
+          </h2>
         </div>
       )}
 
       {showFireworks && (
-        <div className="fireworkDiv" style={{
-          position: 'absolute', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: '100%', 
-          zIndex: 9999, 
-          pointerEvents: 'none'  // Ensures fireworks don't interfere with user input
-        }} />
+        <div
+          className="fireworkDiv"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 9999,
+            pointerEvents: 'none',
+          }}
+        />
       )}
     </div>
   );
